@@ -1,338 +1,183 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>测一测，TA是不是也在偷偷喜欢你</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif}
-body{background:#fff5f5;color:#333;padding:16px;min-height:100vh}
-.container{max-width:600px;margin:0 auto;background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 16px rgba(255,160,160,0.15)}
-.home{display:block}
-.quiz,.result{display:none}
-h1{font-size:24px;color:#e66b7b;text-align:center;margin-bottom:8px}
-.subtitle{text-align:center;color:#777;margin-bottom:20px}
-.tags{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
-.tag{background:#ffe9eb;color:#d65464;padding:10px;border-radius:12px;font-size:14px;text-align:center}
-.start-btn{width:100%;padding:14px;background:#e66b7b;color:#fff;border:none;border-radius:14px;font-size:17px}
-.tip{text-align:center;margin-top:14px;color:#999;font-size:13px}
-.question-title{font-size:16px;margin-bottom:16px;line-height:1.5}
-.opt{display:block;width:100%;text-align:left;padding:12px 14px;margin:8px 0;border:1px solid #ffd6db;border-radius:12px;background:#fff;cursor:pointer}
-.opt:hover{background:#fff0f2}
-.opt.selected{background:#ffe9eb;border-color:#e66b7b}
-.progress{margin-bottom:16px;color:#d65464;font-size:14px}
-.result-box{padding:20px;background:#fff0f2;border-radius:16px;margin-top:16px}
-.result-title{font-size:20px;color:#d65464;font-weight:bold;margin-bottom:10px}
-.result-desc{line-height:1.7;color:#444}
-.reset-btn{margin-top:20px;width:100%;padding:14px;background:#e66b7b;color:#fff;border:none;border-radius:14px;font-size:16px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心动小测试 | TA是不是也在偷偷喜欢你</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pinkMain: '#ff6b8b',
+                        pinkLight: '#ffe7ec',
+                    },
+                    fontFamily: {
+                        sans: ['system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .bg-heart {
+                background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 10c-4-4-10-4-14 0s-4 10 0 14l14 14 14-14c4-4 4-10 0-14s-10-4-14 0z' fill='%23ffd6e0' fill-opacity='0.4'/%3E%3C/svg%3E");
+            }
+            .btn-gradient {
+                background: linear-gradient(90deg, #ff5e7d, #ff9c8c);
+            }
+        }
+    </style>
 </head>
-<body>
-<div class="container">
-  <!-- 首页 -->
-  <div class="home" id="home">
-    <h1>测一测，TA 是不是也在偷偷喜欢你</h1>
-    <p class="subtitle">凭你的心动细节，匹配TA 的真实心意</p>
-    <div class="tags">
-      <div class="tag">心动细节 | 每个举动都有答案</div>
-      <div class="tag">聊天温度 | 回复速度藏着态度</div>
-      <div class="tag">暧昧浓度 | 你们现在到哪一步</div>
-      <div class="tag">心意解读 | TA 心里到底怎么看你</div>
-    </div>
-    <button class="start-btn" onclick="startQuiz()">点击测试</button>
-    <p class="tip">趣味测试仅供娱乐，别拿结果去质问他</p>
-  </div>
+<body class="bg-[#ffe7ec] bg-heart min-h-screen">
+    <div id="home" class="px-5 py-16 max-w-xl mx-auto">
+        <div class="text-center">
+            <span class="inline-block bg-white text-pinkMain px-4 py-1 rounded-full text-sm shadow-sm mb-6">❤️ 心动小测试</span>
+            <h2 class="text-[clamp(1.7rem,5vw,2.2rem)] font-bold text-gray-800">测一测，</h2>
+            <h1 class="text-[clamp(2rem,6vw,2.6rem)] font-bold text-pinkMain mt-1">TA 是不是也在偷偷喜欢你</h1>
+            <p class="text-gray-500 mt-3 text-sm">凭你的心动细节，匹配 TA 的真实心意</p>
 
-  <!-- 答题页 -->
-  <div class="quiz" id="quiz">
-    <div class="progress" id="progress"></div>
-    <div class="question-title" id="qTitle"></div>
-    <div id="optsBox"></div>
-  </div>
+            <div class="grid grid-cols-2 gap-4 mt-10">
+                <div class="bg-white rounded-xl p-4 shadow-sm">
+                    <p class="text-pinkMain font-medium text-sm"><i class="fa fa-heart mr-1"></i>心动细节</p>
+                    <p class="text-gray-400 text-xs mt-1">每个举动都有答案</p>
+                </div>
+                <div class="bg-white rounded-xl p-4 shadow-sm">
+                    <p class="text-pinkMain font-medium text-sm"><i class="fa fa-heart mr-1"></i>聊天温度</p>
+                    <p class="text-gray-400 text-xs mt-1">回复速度藏着态度</p>
+                </div>
+                <div class="bg-white rounded-xl p-4 shadow-sm">
+                    <p class="text-pinkMain font-medium text-sm"><i class="fa fa-heart mr-1"></i>暧昧浓度</p>
+                    <p class="text-gray-400 text-xs mt-1">你们现在到哪一步</p>
+                </div>
+                <div class="bg-white rounded-xl p-4 shadow-sm">
+                    <p class="text-pinkMain font-medium text-sm"><i class="fa fa-heart mr-1"></i>心意解读</p>
+                    <p class="text-gray-400 text-xs mt-1">TA心里到底怎么看你</p>
+                </div>
+            </div>
 
-  <!-- 结果页 -->
-  <div class="result" id="result">
-    <div class="result-box">
-      <div class="result-title" id="resTitle"></div>
-      <div class="result-desc" id="resDesc"></div>
+            <button onclick="startTest()" class="btn-gradient w-full py-4 rounded-full text-white font-bold text-lg mt-10 shadow-lg">
+                点击测试
+            </button>
+            <p class="text-gray-400 text-xs mt-4">趣味测试仅供娱乐，别拿结果去质问 TA</p>
+        </div>
     </div>
-    <button class="reset-btn" onclick="resetAll()">重新测试</button>
-  </div>
-</div>
+
+    <div id="questionBox" class="hidden px-5 py-12 max-w-xl mx-auto min-h-screen">
+        <div class="bg-white rounded-2xl p-6 shadow-md">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-pinkMain font-medium">题目 <span id="qIndex">1</span>/32</span>
+                <div class="h-2 w-28 bg-gray-100 rounded-full overflow-hidden">
+                    <div id="progressBar" class="h-full bg-pinkMain w-[3.125%]"></div>
+                </div>
+            </div>
+            <h3 id="qTitle" class="text-gray-800 font-semibold text-lg mb-6"></h3>
+            <div id="optionList" class="space-y-3"></div>
+        </div>
+    </div>
+
+    <div id="resultBox" class="hidden px-5 py-12 max-w-xl mx-auto min-h-screen">
+        <div class="bg-white rounded-2xl p-7 shadow-md text-center">
+            <div class="text-5xl mb-4" id="resEmoji">💗</div>
+            <h2 id="resTitle" class="text-xl font-bold text-pinkMain"></h2>
+            <p id="resDesc" class="text-gray-600 mt-4 text-sm leading-relaxed"></p>
+            <button onclick="restart()" class="btn-gradient w-full py-3 rounded-full text-white font-bold mt-8">重新测试</button>
+        </div>
+    </div>
 
 <script>
-// 10个结果key
-const keys = [
-  "s1", //双向奔赴
-  "s2", //偷偷暗恋
-  "s3", //友达以上
-  "s4", //慢热观望
-  "s5", //故作镇定
-  "s6", //纯友谊
-  "s7", //暧昧拉扯
-  "s8", //礼貌友好
-  "s9", //信号错位
-  "s10"//时机未到
-];
-const resultText = {
-  s1:{title:"双向奔赴型—你俩就差一个人先开口",desc:"百分百双向心动！你们的好感是双向对等的，你的小心翼翼、主动试探，TA全部都懂并且悄悄回应。日常的聊天、见面、偏爱都是互相奔赴的证明，没有单方面的自作多情，没有无效拉扯。两个人心里都装着彼此，只差一个勇敢的契机，主动一点，马上就能解锁甜甜的恋爱！"},
-  s2:{title:"偷偷暗恋型—TA 也喜欢你，只是不敢说",desc:"典型的嘴硬心软暗恋选手！TA心里早就对你心动满满，只是性格害羞、害怕被拒绝，不敢直白表达爱意。会偷偷记住你的喜好、关注你的动态、迁就你的情绪，所有细节里都是藏不住的偏爱。TA一直在默默喜欢你，只是把心意藏得很深，等着你来主动戳破窗户纸。"},
-  s3:{title:"友达以上型—再靠近一点就变味了",desc:"你们处于最微妙的暧昧临界点！关系远超普通朋友，有偏爱、有默契、有心动，习惯性依赖彼此，相处氛围甜度拉满。只是目前还卡在舒适区，没人敢突破朋友的界限。不用着急，慢慢相处、持续升温，再主动靠近一点点，你们立刻就能从挚友变成挚爱。"},
-  s4:{title:"慢热观望型—有感觉，但还在观察你",desc:"TA对你有明确好感，并非无感！只是TA性格极度慢热，对待感情非常谨慎，不会轻易投入真心。TA一直在默默观察你的性格、相处适配度、对待TA的态度，悄悄积累心动值。只要你保持真诚、稳定输出温柔，熬过观望期，TA一定会彻底敞开心扉接纳你。"},
-  s5:{title:"故作镇定型—嘴上说没有，身体很诚实",desc:"顶级口是心非选手非TA莫属！嘴上装作对你毫无感觉、淡定疏离，刻意保持高冷姿态，害怕暴露自己的心意。但肢体动作、细节态度根本藏不住，会下意识偏向你、关注你、偏爱你。所有的淡定都是伪装，心底的心动早就藏不住了。"},
-  s6:{title:"纯友谊型—TA 真的只把你当朋友",desc:"妥妥的纯纯友谊局！TA对你只有朋友的真诚和善意，所有的温柔、热情、陪伴，都是对待好朋友的常态。没有暧昧滤镜、没有心动偏爱，相处轻松又自在，没有拉扯和试探。不必过度脑补心动细节，保持朋友关系，就是你们最好的相处状态。"},
-  s7:{title:"暧昧拉扯型—享受这个过程，就是不表态",desc:"你们是典型的高甜度暧昧拉扯！TA很享受和你相处的心动氛围，喜欢你的陪伴、偏爱和温柔，愿意和你暧昧升温。但TA暂时不想确立关系，喜欢这种不用负责、自由松弛的拉扯感，不主动、不拒绝、不负责，卡在暧昧期反复徘徊。"},
-  s8:{title:"礼貌友好型—TA对谁都这样，别多想",desc:"千万不要自作多情！TA的温柔、耐心、秒回、友善，是刻在骨子里的教养，是对所有人的标配态度。你以为的专属偏爱，其实是TA的人人平等。没有特殊心动，没有隐秘好感，单纯的礼貌待人，所有心动都是你的单方面脑补。"},
-  s9:{title:"信号错位型—你的心动，TA 根本没接收到",desc:"完美错过的心动错位！你释放了无数好感信号，小心翼翼试探、默默主动奔赴，满心都是TA。但TA的恋爱雷达完全失灵，压根没捕捉到你的心意，把你的偏爱当成普通友好，把你的试探当成日常相处。不是不喜欢你，是你们的心动信号完全对不上频道。"},
-  s10:{title:"时机未到型—有戏，但眼下不是时候",desc:"你们的缘分绝对是有的！TA对你有好感、不排斥、有期待，心里认可你的所有优点，并不抗拒和你发展关系。只是当下因为心态、状态、环境等各种原因，暂时不想开启恋爱模式。静待时机、稳步相处，等到合适的时间，你们一定会顺势走到一起。"}
-};
-
-// 32题，每一题 {title, opts: [{text,scoreKey}]}
 const questions = [
-  {title:"TA凌晨两点回你消息，你大概率的直观感受是？",opts:[
-    {text:"肯定特意等我消息",k:"s1"},
-    {text:"随手刷手机顺便回我",k:"s8"},
-    {text:"心里有点惦记我才回复",k:"s2"},
-    {text:"单纯熬夜无聊，没有特殊含义",k:"s6"}
-  ]},
-  {title:"你们的聊天记录里，谁更常主动结尾对话？",opts:[
-    {text:"基本都是TA收尾，从不冷场",k:"s5"},
-    {text:"你来我往，轮流收尾，僵持拉扯",k:"s7"},
-    {text:"大多是我结尾，TA不会主动停聊",k:"s9"},
-    {text:"看心情随机，没有固定规律",k:"s4"}
-  ]},
-  {title:"TA发朋友圈，你大概多久会去点赞评论？",opts:[
-    {text:"秒点赞，第一时间关注动态",k:"s1"},
-    {text:"隔几小时刷到随缘互动",k:"s8"},
-    {text:"特意等一会再点赞，假装不刻意",k:"s3"},
-    {text:"很少主动互动，基本刷过就过",k:"s6"}
-  ]},
-  {title:"TA主动约你吃饭，常用理由是？",opts:[
-    {text:"专门找借口，就想单独约你",k:"s2"},
-    {text:"刚好有空、刚好附近，随缘邀约",k:"s4"},
-    {text:"多人局顺带喊上你，从不单独约",k:"s6"},
-    {text:"先试探问你空不空，不直接敲定",k:"s7"}
-  ]},
-  {title:"和你线下见面时，TA的小动作更偏向？",opts:[
-    {text:"不自觉看向你、贴近你，细节很温柔",k:"s5"},
-    {text:"举止大方自然，和对待普通朋友没区别",k:"s8"},
-    {text:"有点拘谨害羞，说话小心翼翼",k:"s2"},
-    {text:"全程放松随意，打打闹闹毫无顾忌",k:"s3"}
-  ]},
-  {title:"你分享日常碎碎念，TA的回复状态是？",opts:[
-    {text:"认真接话、延伸话题，从不敷衍",k:"s1"},
-    {text:"偶尔回应，大多简单表情包敷衍",k:"s9"},
-    {text:"时热时冷，想聊就聊、不想聊就沉默",k:"s7"},
-    {text:"礼貌性回复，对所有人都很耐心",k:"s8"}
-  ]},
-  {title:"共同朋友提起你的时候，TA的反应是？",opts:[
-    {text:"主动接话，主动聊起你的趣事",k:"s5"},
-    {text:"淡淡附和两句，快速跳过话题",k:"s4"},
-    {text:"默默倾听，不会多说也不反驳",k:"s2"},
-    {text:"毫无波澜，和听陌生人八卦一样",k:"s6"}
-  ]},
-  {title:"节日、生日的时候，TA对你的祝福是？",opts:[
-    {text:"专属定制文案，卡点发送超用心",k:"s1"},
-    {text:"统一群发模板祝福，毫无特殊性",k:"s8"},
-    {text:"记得你的日子，但只简单一句祝福",k:"s10"},
-    {text:"偶尔忘记，你提醒了才会回应",k:"s9"}
-  ]},
-  {title:"你偶尔闹小情绪冷淡TA，TA会？",opts:[
-    {text:"立刻察觉，主动哄你、找你聊天",k:"s2"},
-    {text:"察觉到但假装没发现，默默观望",k:"s4"},
-    {text:"跟着一起冷淡，僵持不下不低头",k:"s7"},
-    {text:"完全没察觉，照常正常相处聊天",k:"s6"}
-  ]},
-  {title:"TA会不会主动找你分享琐事、搞笑视频？",opts:[
-    {text:"高频分享，事事报备日常",k:"s1"},
-    {text:"很少主动，基本都是你找TA聊",k:"s9"},
-    {text:"偶尔分享，只在空闲无聊时找你",k:"s3"},
-    {text:"随缘分享，好友列表随机分发",k:"s8"}
-  ]},
-  {title:"你们单独相处时，氛围通常是？",opts:[
-    {text:"甜甜的暧昧氛围，安静也不尴尬",k:"s1"},
-    {text:"轻松热闹，纯朋友打闹氛围",k:"s6"},
-    {text:"有点微妙拘谨，双方都有点克制",k:"s2"},
-    {text:"忽近忽远，时而亲密时而疏离",k:"s7"}
-  ]},
-  {title:"你主动找TA帮忙，TA的态度是？",opts:[
-    {text:"优先帮你，尽全力搞定不推脱",k:"s5"},
-    {text:"礼貌帮忙，对朋友都一视同仁",k:"s8"},
-    {text:"愿意帮忙，但会稍微犹豫考量",k:"s4"},
-    {text:"偶尔推脱，看自己心情决定",k:"s9"}
-  ]},
-  {title:"TA会不会记住你随口说的小喜好、小习惯？",opts:[
-    {text:"记得超清楚，还会悄悄迎合你",k:"s2"},
-    {text:"偶尔记住，大部分转头就忘",k:"s10"},
-    {text:"完全记不住，每次都要你重复",k:"s6"},
-    {text:"选择性记住，有用的细节才留意",k:"s7"}
-  ]},
-  {title:"聊天结束后，TA会不会回头翻看你们的聊天记录？",opts:[
-    {text:"大概率会，细节里都是在意",k:"s1"},
-    {text:"基本不会，聊完就翻篇",k:"s8"},
-    {text:"偶尔翻看，心里会默默琢磨",k:"s4"},
-    {text:"想翻但克制自己，假装不在意",k:"s5"}
-  ]},
-  {title:"你发小众心情朋友圈，仅TA可见时，TA会？",opts:[
-    {text:"立刻私信关心你的状态",k:"s2"},
-    {text:"点赞沉默，不提问也不打扰",k:"s3"},
-    {text:"视而不见，没有任何互动反应",k:"s9"},
-    {text:"随缘互动，看当下心情状态",k:"s7"}
-  ]},
-  {title:"和一群人出去玩，TA会下意识？",opts:[
-    {text:"主动站在你身边、护着你",k:"s5"},
-    {text:"和所有人打成一片，不偏向任何人",k:"s8"},
-    {text:"偶尔关注你，不会表现太明显",k:"s4"},
-    {text:"全程和别人互动，几乎不搭理你",k:"s6"}
-  ]},
-  {title:"你主动夸赞TA，TA的反应是？",opts:[
-    {text:"害羞慌乱，嘴角藏不住笑意",k:"s2"},
-    {text:"坦然接受，顺势和你互夸拉扯",k:"s7"},
-    {text:"礼貌道谢，态度平淡很克制",k:"s8"},
-    {text:"没太大反应，当成普通客套话",k:"s9"}
-  ]},
-  {title:"你们断联几天不聊天，TA会？",opts:[
-    {text:"主动破冰，找话题开启聊天",k:"s1"},
-    {text:"等你主动，自己绝不先低头",k:"s10"},
-    {text:"完全无所谓，断联也毫无影响",k:"s6"},
-    {text:"偶尔试探，发动态暗示但不找你",k:"s4"}
-  ]},
-  {title:"TA对你的专属程度，更接近？",opts:[
-    {text:"对你和别人完全不一样，偏爱超明显",k:"s1"},
-    {text:"轻微特殊，但外人基本看不出来",k:"s3"},
-    {text:"一视同仁，温柔礼貌给所有人",k:"s8"},
-    {text:"时而特殊时而普通，情绪反复不定",k:"s7"}
-  ]},
-  {title:"你主动靠近拉近关系，TA的反应是？",opts:[
-    {text:"顺势靠近，双向主动升温",k:"s1"},
-    {text:"轻微回避，保持安全距离观望",k:"s4"},
-    {text:"坦然接受亲近，享受暧昧氛围",k:"s7"},
-    {text:"完全无感，只觉得是朋友相处",k:"s6"}
-  ]},
-  {title:"TA回复你消息的常态速度是？",opts:[
-    {text:"看到就回，几乎从不拖延",k:"s1"},
-    {text:"有空就回，没空就搁置，很随机",k:"s8"},
-    {text:"刻意晚点回，假装自己不主动",k:"s5"},
-    {text:"经常长时间不回，无视你的消息",k:"s9"}
-  ]},
-  {title:"聊到感情话题时，TA会？",opts:[
-    {text:"主动试探你的感情状态",k:"s2"},
-    {text:"岔开话题，不愿深入聊这类话题",k:"s10"},
-    {text:"随口聊聊，当作普通八卦闲谈",k:"s6"},
-    {text:"模棱两可，不拒绝也不表态",k:"s7"}
-  ]},
-  {title:"你送TA小礼物，TA的态度是？",opts:[
-    {text:"超级珍惜，会好好珍藏、时常提及",k:"s2"},
-    {text:"礼貌收下，过后基本不会在意",k:"s8"},
-    {text:"开心收下，但表现得很淡定克制",k:"s5"},
-    {text:"收下就放一边，没任何特殊反应",k:"s9"}
-  ]},
-  {title:"你们吵架、小拌嘴后的相处状态是？",opts:[
-    {text:"快速和好，舍不得和你冷战",k:"s1"},
-    {text:"僵持一阵子，慢慢自行缓和",k:"s4"},
-    {text:"冷战拉扯，谁也不愿主动让步",k:"s7"},
-    {text:"吵完翻篇，完全不放在心上",k:"s6"}
-  ]},
-  {title:"TA会不会悄悄关注你的社交动态小号？",opts:[
-    {text:"大概率会，默默关注你的一切",k:"s2"},
-    {text:"完全不会，只看公开大号动态",k:"s8"},
-    {text:"想关注但刻意克制自己",k:"s5"},
-    {text:"没留意过你的小号，毫无概念",k:"s9"}
-  ]},
-  {title:"单独约会结束后，TA会？",opts:[
-    {text:"主动报备到家，还会续聊很久",k:"s1"},
-    {text:"礼貌说再见，之后就不再联系",k:"s8"},
-    {text:"回味相处细节，悄悄对你更上心",k:"s3"},
-    {text:"态度平淡，和普通聚会没有区别",k:"s6"}
-  ]},
-  {title:"别人调侃你们关系暧昧，TA会？",opts:[
-    {text:"不反驳，偷偷偷笑默认",k:"s5"},
-    {text:"认真解释，明确说是普通朋友",k:"s8"},
-    {text:"含糊其辞，打太极拉扯氛围",k:"s7"},
-    {text:"有点害羞，快速转移话题逃离",k:"s2"}
-  ]},
-  {title:"你主动分享负面情绪，TA会？",opts:[
-    {text:"耐心安抚，全程共情陪伴",k:"s1"},
-    {text:"简单安慰两句，快速结束话题",k:"s9"},
-    {text:"礼貌开导，对所有人都这般温柔",k:"s8"},
-    {text:"默默倾听，慢慢观察你的状态",k:"s4"}
-  ]},
-  {title:"TA主动创造和你偶遇、同框的机会吗？",opts:[
-    {text:"经常刻意制造相处机会",k:"s2"},
-    {text:"偶尔随缘碰到，没有刻意安排",k:"s3"},
-    {text:"从不刻意，全靠顺其自然",k:"s6"},
-    {text:"有想法但不敢主动行动",k:"s10"}
-  ]},
-  {title:"你们的聊天氛围长期状态是？",opts:[
-    {text:"甜度超标，双向奔赴超合拍",k:"s1"},
-    {text:"不冷不热，卡在朋友和暧昧之间",k:"s3"},
-    {text:"忽冷忽热，拉扯感满满",k:"s7"},
-    {text:"平淡客气，标准普通朋友聊天",k:"s8"}
-  ]},
-  {title:"你释放心动好感信号，TA的接收状态是？",opts:[
-    {text:"精准捕捉，还会悄悄回应你",k:"s1"},
-    {text:"完全没看懂，白白浪费你的主动",k:"s9"},
-    {text:"看懂了，但故意假装不知道",k:"s5"},
-    {text:"看懂了，在心里慢慢考量适配度",k:"s4"}
-  ]},
-  {title:"综合所有相处细节，你们的阻碍更偏向？",opts:[
-    {text:"两人都害羞，只差一句告白",k:"s1"},
-    {text:"彼此有好感，但当下不适合恋爱",k:"s10"},
-    {text:"只有你心动，TA只是礼貌待人",k:"s8"},
-    {text:"氛围到位，就是没人愿意确定关系",k:"s7"}
-  ]}
-];
+    {title:"TA会不会主动找话题和你聊天？",opts:["经常主动","偶尔主动","很少，基本我找TA","从来不主动"]},
+    {title:"TA回复你的消息速度？",opts:["很快，大多几分钟内","一般，半小时左右","经常隔很久才回","经常已读不回"]},
+    {title:"TA会不会记住你随口说的小事？",opts:["会，记得很清楚","偶尔记得","很少记住","完全没印象"]},
+    {title:"TA会不会主动关心你的情绪和状态？",opts:["经常关心","偶尔关心","只有我提了才关心","从不关心"]},
+    {title:"你们线下见面时TA眼神？",opts:["经常偷偷看你、对视害羞","会正常对视聊天","很少看你","刻意避开眼神"]},
+    {title:"TA愿意单独和你见面吗？",opts:["很乐意主动约","你约一般会来","找理由推脱","直接拒绝单独见面"]},
+    {title:"TA会不会对你分享日常琐事？",opts:["经常碎碎念分享","偶尔分享","只聊正事","几乎不分享私人生活"]},
+    {title:"TA会不会吃你的醋？",opts:["明显会吃醋、不开心","隐约有点在意","无感，无所谓","觉得和TA无关"]},
+    {title:"TA在朋友面前提起你的时候？",opts:["主动提到你、夸你","别人问才说你","不太愿意提起","刻意避开聊你"]},
+    {title:"TA会不会照顾你的喜好、迁就你？",opts:["主动迁就照顾","偶尔迁就","很少迁就","优先自己舒服"]},
+    {title:"深夜的时候，你们会聊天吗？",opts:["经常深夜长聊","偶尔聊一会","很少深夜聊天","深夜基本不回消息"]},
+    {title:"TA会不会对你有特殊昵称？",opts:["专属昵称","叫名字小名","只叫全名","称呼很客气疏远"]},
+    {title:"TA会不会留意你的社交动态？",opts:["每条都会看、点赞评论","偶尔点赞","很少看你的动态","完全不关注"]},
+    {title:"吵架或者冷淡之后，谁先缓和？",opts:["TA主动低头哄你","双方轮流让步","基本都是你主动","TA冷处理不妥协"]},
+    {title:"TA会不会规划和你的未来小事？",opts:["主动提一起以后的计划","偶尔随口提","只聊当下","从来不会提"]},
+    {title:"TA愿意把你介绍给好朋友吗？",opts:["主动介绍给朋友","你要求才介绍","不太愿意","不想让别人知道你们来往"]},
+    {title:"TA和你聊天会不会发暧昧表情包？",opts:["经常发暧昧温柔的","偶尔发可爱的","只发普通表情","很少发表情包"]},
+    {title:"TA会不会对你有肢体靠近（不越界）？",opts:["自然靠近、不经意接触","偶尔近距离","刻意保持距离","明显回避靠近"]},
+    {title:"你难过的时候TA反应？",opts:["认真安抚、心疼你","简单安慰两句","说几句客套话","无动于衷"]},
+    {title:"TA会不会找借口来见你？",opts:["经常制造机会见面","偶尔找机会","需要你创造机会","不愿多见"]},
+    {title:"TA会不会吃醋打探你的异性朋友？",opts:["主动打听、很在意","旁敲侧击问一点","不在意你的异性朋友","反感你问TA异性关系"]},
+    {title:"TA会不会记住你的生日、重要日子？",opts:["记得还准备小惊喜","记得但不特意准备","会忘记","根本不知道"]},
+    {title:"聊天结束，一般是谁收尾？",opts:["TA舍不得结束，找续话","轮流收尾","大多是你收尾","TA直接消失不道别"]},
+    {title:"TA会不会愿意为你花时间？",opts:["愿意挤出时间陪你","有空才陪你","很忙就直接忽略你","永远没时间"]},
+    {title:"TA对你和对其他人一样吗？",opts:["明显对你更特殊温柔","稍微对你好一点","差别不大","对你更冷淡"]},
+    {title:"TA会不会向你吐露脆弱心事？",opts:["只愿意跟你倾诉心事","偶尔跟你说心里话","很少说内心想法","心事完全不和你说"]},
+    {title:"TA会不会开玩笑撩你？",opts:["经常温柔撩你","偶尔开玩笑撩","只有朋友式玩笑","从不撩你"]},
+    {title:"TA看到你消息，会不会拖着不回？",opts:["不会，有空就回","忙完会回你","经常拖延很久回","经常故意不回"]},
+    {title:"你们聊天氛围？",opts:["轻松甜蜜，有说不完话","平淡舒服","容易冷场","聊天很压抑尴尬"]},
+    {title:"TA会不会主动给你小礼物/小零食？",opts:["主动送小礼物零食","偶尔顺手带","你要才给","从来不会"]},
+    {title:"TA会不会害怕失去你？",opts:["很怕失去你","有点在意会不会走","无所谓你离开","巴不得保持距离"]},
+    {title:"综合感受：你觉得TA对你？",opts:["明显喜欢，藏不住好感","有好感但不敢行动","只是普通朋友礼貌","对你没有心动感觉"]}
+]
+const resultList = [
+    {emoji:"💖",title:"双向奔赴｜TA超级喜欢你！",desc:"TA心里早就对你动心啦，一直悄悄留意你、惦记你，很多克制的温柔都是喜欢你的证据，大胆靠近，很容易修成正果！"},
+    {emoji:"💗",title:"满心在意｜TA在偷偷暗恋你",desc:"TA默默喜欢你很久了，只是有点害羞不敢主动，很多细节都藏着偏爱，再多一点信号，TA就敢走向你。"},
+    {emoji:"💕",title:"暧昧升温｜好感正在慢慢发芽",desc:"TA对你是有好感的，还在观望和适应阶段，不排斥靠近，持续好好相处，很容易从暧昧变成喜欢。"},
+    {emoji:"💓",title:"友达以上｜有点心动但还犹豫",desc:"TA对你感觉不错，有一点点心动，但是还没到喜欢，还在权衡，需要更多契机拉近距离。"},
+    {emoji:"💘",title:"温柔礼貌｜只是把你当很好的朋友",desc:"TA对你很好，但是更多是礼貌和友情，没有恋人方向的心动，适合保持舒服的朋友关系。"},
+    {emoji:"🤍",title:"慢慢观望｜暂时没有心动信号",desc:"TA目前对你没有喜欢的感觉，对你比较平淡，不排斥但也没有主动靠近的欲望。"},
+    {emoji:"🫧",title:"距离感｜TA只想保持边界",desc:"TA下意识和你保持距离，很多回应都是客气礼貌，不要过度解读TA的善意。"},
+    {emoji:"☁️",title:"单向心动｜只有你在主动",desc:"这段关系大多是你在付出，TA没有同等的心意，及时止损，好好爱护自己。"},
+    {emoji:"🌙",title:"忽冷忽热｜TA对你可有可无",desc:"TA无聊时找你，忙起来就忽略你，你不是TA优先选择的人，别陷太深。"},
+    {emoji:"🍃",title:"无感状态｜TA对你没有想法",desc:"TA对你没有恋爱层面的好感，你的主动很难打动TA，把心意留给同样喜欢你的人吧。"}
+]
 
-let current = 0;
-let score = {s1:0,s2:0,s3:0,s4:0,s5:0,s6:0,s7:0,s8:0,s9:0,s10:0};
-
-function startQuiz(){
-  document.getElementById("home").style.display="none";
-  document.getElementById("quiz").style.display="block";
-  showQ();
+let score = 0
+let current = 0
+function startTest(){
+    document.getElementById('home').classList.add('hidden')
+    document.getElementById('questionBox').classList.remove('hidden')
+    showQ()
 }
 function showQ(){
-  const q = questions[current];
-  document.getElementById("progress").innerText = `第${current+1}题 / 共${questions.length}题`;
-  document.getElementById("qTitle").innerText = q.title;
-  const box = document.getElementById("optsBox");
-  box.innerHTML = "";
-  q.opts.forEach((opt,idx)=>{
-    const b = document.createElement("button");
-    b.className = "opt";
-    b.innerText = opt.text;
-    b.onclick = ()=>{
-      score[opt.k]++;
-      current++;
-      if(current >= questions.length){
-        showResult();
-      }else{
-        showQ();
-      }
+    const q = questions[current]
+    document.getElementById('qIndex').innerText = current+1
+    document.getElementById('qTitle').innerText = q.title
+    document.getElementById('progressBar').style.width = ((current+1)/32*100)+'%'
+    let html = ''
+    q.opts.forEach((opt,i)=>{
+        let s = 3 - i
+        html += `<div onclick="select(${s})" class="border border-pinkLight rounded-xl p-4 hover:bg-pinkLight cursor-pointer transition-all">${opt}</div>`
+    })
+    document.getElementById('optionList').innerHTML = html
+}
+function select(s){
+    score += s
+    current++
+    if(current >= questions.length){
+        showResult()
+    }else{
+        showQ()
     }
-    box.appendChild(b);
-  })
 }
 function showResult(){
-  document.getElementById("quiz").style.display="none";
-  document.getElementById("result").style.display="block";
-  //找最高分
-  let maxk = "s1";
-  let maxv = 0;
-  for(let k in score){
-    if(score[k]>maxv){
-      maxv=score[k];maxk=k;
-    }
-  }
-  const r = resultText[maxk];
-  document.getElementById("resTitle").innerText = r.title;
-  document.getElementById("resDesc").innerText = r.desc;
+    document.getElementById('questionBox').classList.add('hidden')
+    document.getElementById('resultBox').classList.remove('hidden')
+    let idx = Math.floor(score / (32*4 / resultList.length))
+    idx = Math.min(idx, resultList.length-1)
+    const r = resultList[idx]
+    document.getElementById('resEmoji').innerText = r.emoji
+    document.getElementById('resTitle').innerText = r.title
+    document.getElementById('resDesc').innerText = r.desc
 }
-function resetAll(){
-  current=0;
-  score={s1:0,s2:0,s3:0,s4:0,s5:0,s6:0,s7:0,s8:0,s9:0,s10:0};
-  document.getElementById("result").style.display="none";
-  document.getElementById("home").style.display="block";
+function restart(){
+    score=0;current=0
+    document.getElementById('resultBox').classList.add('hidden')
+    document.getElementById('home').classList.remove('hidden')
 }
 </script>
 </body>
